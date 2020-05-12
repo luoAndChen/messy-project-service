@@ -1,0 +1,45 @@
+server:
+  port: 9540
+
+spring:
+  application:
+    name: study-gateway
+  zipkin:
+         base-url: http://localhost:9411/ # zipkin的地址
+         discovery-client-enabled: false  #让注册中心把它当成url  而不要当成服务
+  sleuth:
+     sampler:
+       probability: 1.0 #标识全部采集{0-1}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    gateway:
+   # ���������ע�ᷢ�������ϣ��������Բ��÷�������·�ɲ���
+     discovery:
+       locator:
+         enabled: true
+       # ����·�ɹ���
+     routes:
+       # �����Զ���·�� ID ûʲôҪ�� ������������±�
+       - id: study-consumer-01
+         # ���� LoadBalanceClient ��ʽ������ lb:// ��ͷ���������ע���� Nacos �ϵķ����� lb��Ĭ�Ͽ��������㷨
+         uri: lb://study-consumer
+         #·�����ȼ�
+         orser: 1
+         # �����ԡ�����Ҫ������ƥ���û��������кܶ����÷�
+         predicates:
+           # Method ����ν�ʣ�������ƥ�� GET ����
+           #- Method=GET
+           # ��������� study-consumer ��ͷ�Ż������·��
+           - Path=/study-consumer-service/**
+           - Auth=123456
+        # ������
+         filters:
+         #·��ת��ʱ����ȥ��һ��
+           - StripPrefix=1
+# ������־���𣬷������
+logging:
+  level:
+    org.springframework.cloud.gateway: debug

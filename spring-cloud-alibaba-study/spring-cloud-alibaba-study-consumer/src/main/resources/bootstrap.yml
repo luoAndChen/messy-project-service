@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/hyl_order?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  application:
+    name: study-consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        alibaba:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+    alibaba:
+      seata:
+          tx-service-group: study-consumer
+
+  profiles:
+    active: dev
+       # namespace: 6d862c1a-a1e3-40b6-83a5-35958f92e8a8
+
+# mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.hyl.study.api.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    # 配置slq打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
